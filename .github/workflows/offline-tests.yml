@@ -39,6 +39,7 @@ jobs:
             libglib2.0-dev \
             libgusb-dev \
             libssl-dev \
+            libopencv-dev \
             libcairo2-dev
 
       - name: Validate and apply experimental patch
