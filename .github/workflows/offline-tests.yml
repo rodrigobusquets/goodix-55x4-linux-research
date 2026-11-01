@@ -1,0 +1,73 @@
+name: Goodix offline tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and test without hardware
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout research repository
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned upstream revision
+        uses: actions/checkout@v4
+        with:
+          repository: GuNanOvO/goodix-55x4-linux
+          ref: aaa9393d9e6b8d0f29f64879cf6c926a976bb1be
+          path: upstream
+          fetch-depth: 1
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            git \
+            meson \
+            ninja-build \
+            pkg-config \
+            libglib2.0-dev \
+            libgusb-dev \
+            libssl-dev \
+            libcairo2-dev
+
+      - name: Validate and apply experimental patch
+        working-directory: upstream
+        run: |
+          git apply --check "$GITHUB_WORKSPACE/patches/experimental-iap-version.patch"
+          git apply "$GITHUB_WORKSPACE/patches/experimental-iap-version.patch"
+
+      - name: Configure
+        working-directory: upstream/libfprint
+        run: |
+          meson setup builddir \
+            -Ddrivers=goodixtls55x4 \
+            -Dintrospection=false \
+            -Ddoc=false \
+            -Dinstalled-tests=false \
+            -Dgtk-examples=false \
+            -Dudev_rules=disabled \
+            -Dudev_hwdb=disabled
+
+      - name: Compile
+        working-directory: upstream/libfprint
+        run: meson compile -C builddir
+
+      - name: Run Goodix offline tests
+        working-directory: upstream/libfprint
+        run: |
+          meson test -C builddir \
+            goodix-tls \
+            goodix-deactivate \
+            goodix-packets \
+            --print-errorlogs
