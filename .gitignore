@@ -1,0 +1,32 @@
+# Build artifacts
+build/
+builddir/
+builddir-*/
+meson-private/
+meson-logs/
+
+# Compiled files
+*.o
+*.so
+*.so.*
+*.a
+*.dll
+*.exe
+
+# Temporary and backup files
+*.tmp
+*.bak
+*.bak-*
+*~
+
+# Diagnostic logs
+*.log
+
+# Editor and OS files
+.directory
+.DS_Store
+Thumbs.db
+
+# Local environment files
+.env
+.env.*
