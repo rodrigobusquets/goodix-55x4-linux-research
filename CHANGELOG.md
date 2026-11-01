@@ -12,6 +12,7 @@ All notable changes to this research project will be documented here.
 - Protocol command reference.
 - Experimental `GET_IAP_VERSION` (`0xF6`) implementation patch.
 - Offline packet encoding and response validation tests.
+- GitHub Actions workflow for reproducible offline compilation and tests.
 - Testing, contribution and security guidelines.
 - Separate licensing for derived code and original documentation.
 
@@ -21,6 +22,7 @@ All notable changes to this research project will be documented here.
 - Observed a PSK hash mismatch during hardware diagnostics.
 - Observed a timeout during the attempted PSK write operation.
 - Implemented and tested IAP version handling offline.
+- Successfully compiled the patched upstream revision and passed the Goodix offline CI tests on Ubuntu 24.04.
 
 ### Limitations
 
